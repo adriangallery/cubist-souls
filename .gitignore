@@ -1,0 +1,12 @@
+# Foundry build artifacts
+out/
+cache/
+
+# Env / secrets (NEVER commit)
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+*.swp
