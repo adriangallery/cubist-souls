@@ -9,6 +9,7 @@ import {OwnershipFacet} from "../src/facets/OwnershipFacet.sol";
 import {SoulsERC721Facet} from "../src/facets/SoulsERC721Facet.sol";
 import {ConvertFacet} from "../src/facets/ConvertFacet.sol";
 import {SoulsAdminFacet} from "../src/facets/SoulsAdminFacet.sol";
+import {RescueFreeFacet} from "../src/facets/RescueFreeFacet.sol";
 import {PlaceholderRenderer} from "../src/render/PlaceholderRenderer.sol";
 import {SoulsInit} from "../src/upgradeInitializers/SoulsInit.sol";
 import {IDiamondCut} from "../src/interfaces/IDiamondCut.sol";
@@ -127,5 +128,10 @@ contract Deploy is Script {
         s[3] = SoulsAdminFacet.renderer.selector;
         s[4] = SoulsAdminFacet.setConvertPaused.selector;
         s[5] = SoulsAdminFacet.setRoyaltyInfo.selector;
+    }
+
+    function rescueSelectors() public pure returns (bytes4[] memory s) {
+        s = new bytes4[](1);
+        s[0] = RescueFreeFacet.adminFreeBurned.selector;
     }
 }
