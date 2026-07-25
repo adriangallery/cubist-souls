@@ -39,6 +39,7 @@ contract UploadSvgs is Script {
             console.log("Resuming SvgStore:", address(store));
         }
 
+        _uploadCategoryLabels(store);
         _uploadTraits(store);
         _uploadAdrian(store);
         _uploadTokenTable(store);
@@ -47,6 +48,21 @@ contract UploadSvgs is Script {
 
         console.log("Done. SvgStore:", address(store));
         console.log("  trait chunks uploaded:", store.tokenTraitChunkCount());
+    }
+
+    function _uploadCategoryLabels(SvgStore store) internal {
+        (uint8[] memory cats, string[] memory labels) = SvgManifest.categories();
+        uint256 stored;
+        uint256 skipped;
+        for (uint256 i; i < cats.length; ++i) {
+            if (bytes(store.categoryLabel(cats[i])).length != 0) {
+                skipped++;
+                continue;
+            }
+            store.setCategoryLabel(cats[i], labels[i]);
+            stored++;
+        }
+        console.log("Category labels: stored %s, skipped %s", stored, skipped);
     }
 
     function _uploadTraits(SvgStore store) internal {

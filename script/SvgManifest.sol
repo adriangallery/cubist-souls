@@ -165,6 +165,21 @@ library SvgManifest {
         traitIds[148] = 2051; paths[148] = "onchain-data/svg/burn-cube/phoenix.svg"; names[148] = "Phoenix";
     }
 
+    /// @notice Category (z-order) labels for setCategoryLabel, cats 0-8.
+    function categories() internal pure returns (uint8[] memory cats, string[] memory labels) {
+        cats = new uint8[](9);
+        labels = new string[](9);
+        cats[0] = 0; labels[0] = "Art Background";
+        cats[1] = 1; labels[1] = "Base";
+        cats[2] = 2; labels[2] = "Clothes";
+        cats[3] = 3; labels[3] = "Head";
+        cats[4] = 4; labels[4] = "Mouth";
+        cats[5] = 5; labels[5] = "Left Eye";
+        cats[6] = 6; labels[6] = "Nose";
+        cats[7] = 7; labels[7] = "Right Eye";
+        cats[8] = 8; labels[8] = "Burn Cube";
+    }
+
     /// @notice Adrian 1/1 (vector) one-of-one; stored under oneOfOne id 0 (no OG token maps to it yet).
     function adrian() internal pure returns (string memory path, string memory name) {
         path = "onchain-data/svg/one-of-one/adrian.svg";

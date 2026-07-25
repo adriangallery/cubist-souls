@@ -8,7 +8,8 @@ import {Base64} from "../src/onchain/Base64.sol";
 import {SvgManifest} from "../script/SvgManifest.sol";
 import {SvgStrip} from "../script/SvgStrip.sol";
 
-/// Minimal diamond stand-in exposing cohortOf for the renderer's staticcall.
+/// Minimal diamond stand-in exposing cohortOf but NOT equippedTraits: a call to
+/// the missing selector reverts, exercising the renderer's equip try/catch.
 contract MockCohort {
     uint8 public c;
 
@@ -18,6 +19,25 @@ contract MockCohort {
 
     function cohortOf(uint256) external view returns (uint8) {
         return c;
+    }
+}
+
+/// Diamond stand-in with BOTH cohortOf and the future equippedTraits selector.
+contract MockDiamondFull {
+    uint8 public cohort;
+    uint16[] internal eq;
+
+    constructor(uint8 cohort_, uint16[] memory eq_) {
+        cohort = cohort_;
+        eq = eq_;
+    }
+
+    function cohortOf(uint256) external view returns (uint8) {
+        return cohort;
+    }
+
+    function equippedTraits(uint256) external view returns (uint16[] memory) {
+        return eq;
     }
 }
 
@@ -129,6 +149,11 @@ contract OnchainRenderTest is Test {
             realStore.setTrait(ids[i], names[i], inner);
         }
 
+        (uint8[] memory cats, string[] memory labels) = SvgManifest.categories();
+        for (uint256 i; i < cats.length; ++i) {
+            realStore.setCategoryLabel(cats[i], labels[i]);
+        }
+
         (string memory apath, string memory aname) = SvgManifest.adrian();
         realStore.setOneOfOne(0, aname, SvgStrip.inner(bytes(vm.readFile(apath))));
 
@@ -226,7 +251,151 @@ contract OnchainRenderTest is Test {
         assertFalse(_contains(bytes(json), bytes('"trait_type":"Cohort"')));
     }
 
+    // ========================================================= granular sealing
+
+    function test_Store_SealTable_FreezesOnlyTable() public {
+        SvgStore store = new SvgStore();
+        store.sealTable();
+        assertTrue(store.tokenTableFrozen());
+        assertFalse(store.frozen());
+
+        // table writes blocked...
+        bytes memory chunk = new bytes(store.TOKENS_PER_CHUNK() * 8);
+        vm.expectRevert(SvgStore.TableIsSealed.selector);
+        store.setTokenTraitsChunk(0, chunk);
+
+        // ...but new traits and categories still allowed (future drops).
+        store.setCategoryLabel(9, "Frame");
+        store.setTrait(0x0900, "Golden Frame", bytes("<rect/>"));
+        assertTrue(store.traitExists(0x0900));
+        assertEq(store.categoryLabel(9), "Frame");
+    }
+
+    function test_Store_Enumeration() public {
+        SvgStore store = new SvgStore();
+        assertEq(store.nextOption(8), 0);
+        store.setTrait(0x0800, "Burning Soul", bytes("a"));
+        store.setTrait(0x0801, "Second", bytes("b"));
+        assertEq(store.categoryTraitCount(8), 2);
+        assertEq(store.categoryTraitAt(8, 0), 0x0800);
+        assertEq(store.categoryTraitAt(8, 1), 0x0801);
+        assertEq(store.nextOption(8), 2); // next free opt in cat 8
+    }
+
+    function test_Store_CategoryLabel_WriteOnce() public {
+        SvgStore store = new SvgStore();
+        store.setCategoryLabel(0, "Art Background");
+        assertEq(store.categoryLabel(0), "Art Background");
+        vm.expectRevert(SvgStore.AlreadyStored.selector);
+        store.setCategoryLabel(0, "Something Else");
+    }
+
+    // ================================================== evolvable renderer paths
+
+    function test_Real_CategoryLabel_FromStoreWithFallback() public {
+        _loadReal();
+        // store-provided label used (equals the hardcoded one here)
+        string memory json = string(_b64decode(_after(renderer.tokenURI(136), "base64,")));
+        assertTrue(_contains(bytes(json), bytes('"trait_type":"Art Background"')));
+
+        // fresh store with NO labels -> renderer falls back to hardcoded 0-7.
+        SvgStore bare = new SvgStore();
+        bare.setTrait(0x0000, "Color Block", bytes("<rect/>"));
+        SoulRendererV3 r = new SoulRendererV3(address(cohort), address(bare));
+        bytes memory svg = _b64decode(_after(r.composeSvg(_ids(0x0000)), "base64,"));
+        assertTrue(_contains(svg, bytes("<rect/>")));
+    }
+
+    function test_Real_EquippedTraits_RenderedOnTop() public {
+        _loadReal();
+
+        // A diamond that reports one equipped trait (burn-cube "Burning Soul").
+        uint16 equipId = 0x0800; // cat 8, opt 0
+        MockDiamondFull d = new MockDiamondFull(2, _ids(equipId));
+        SoulRendererV3 r = new SoulRendererV3(address(d), address(realStore));
+
+        string memory json = string(_b64decode(_after(r.tokenURI(136), "base64,")));
+        // equipped attribute present: cat 8 label "Burn Cube" + its name
+        assertTrue(_contains(bytes(json), bytes('"trait_type":"Burn Cube"')));
+        assertTrue(_contains(bytes(json), bytes('"value":"Burning Soul"')));
+
+        // and its SVG fragment is layered into the image
+        bytes memory frag = realStore.traitSvg(equipId);
+        string memory equippedImg = _imageField(json);
+        bytes memory decoded = _b64decode(_after(equippedImg, "base64,"));
+        assertTrue(_contains(decoded, frag), "equipped fragment missing from svg");
+    }
+
+    function test_Real_EquipTryCatch_NoSelector_NoRevert() public {
+        _loadReal();
+        // MockCohort has NO equippedTraits selector -> call reverts -> catch ->
+        // renders exactly as with no equips, never reverts.
+        string memory withMock = string(_b64decode(_after(renderer.tokenURI(136), "base64,")));
+        assertFalse(_contains(bytes(withMock), bytes('"trait_type":"Burn Cube"')));
+    }
+
+    function test_Real_ComposeSvg_ArbitraryStack() public {
+        _loadReal();
+        string memory uri = renderer.composeSvg(_ids2(0x0100, 0x0300)); // base opt0 + head opt0
+        assertTrue(_startsWith(uri, "data:image/svg+xml;base64,"));
+        bytes memory svg = _b64decode(_after(uri, "base64,"));
+        assertTrue(_contains(svg, bytes('viewBox="0 0 768 768"')));
+        assertTrue(_contains(svg, realStore.traitSvg(0x0100)));
+        assertTrue(_contains(svg, realStore.traitSvg(0x0300)));
+    }
+
+    function test_Real_NewDrop_AddedTraits_OGUnchanged() public {
+        _loadReal();
+
+        // capture OG token 136 BEFORE any new drop
+        string memory before = renderer.tokenURI(136);
+
+        // NEW DROP: append a fresh cat-8 option and a brand-new category 9.
+        assertEq(realStore.nextOption(8), 4); // 4 burn-cube already loaded
+        uint16 newBurn = (uint16(8) << 8) | realStore.nextOption(8); // 0x0804
+        realStore.setTrait(newBurn, "Comet Cube", bytes("<circle r='9'/>"));
+
+        realStore.setCategoryLabel(9, "Frame");
+        uint16 newFrame = (uint16(9) << 8) | realStore.nextOption(9); // 0x0900
+        realStore.setTrait(newFrame, "Golden Frame", bytes("<rect id='f'/>"));
+
+        // composeSvg serves the new traits immediately (no renderer redeploy).
+        string memory uri = renderer.composeSvg(_ids2(newBurn, newFrame));
+        bytes memory svg = _b64decode(_after(uri, "base64,"));
+        assertTrue(_contains(svg, bytes("<circle r='9'/>")));
+        assertTrue(_contains(svg, bytes("<rect id='f'/>")));
+
+        // OG token 136 is byte-identical: existing art is immutable.
+        assertEq(renderer.tokenURI(136), before, "OG token changed after drop");
+    }
+
     // ==================================================================== helpers
+
+    function _ids(uint16 a) internal pure returns (uint16[] memory out) {
+        out = new uint16[](1);
+        out[0] = a;
+    }
+
+    function _ids2(uint16 a, uint16 b) internal pure returns (uint16[] memory out) {
+        out = new uint16[](2);
+        out[0] = a;
+        out[1] = b;
+    }
+
+    /// @dev extract the value of the "image":"..." field from a decoded JSON.
+    function _imageField(string memory json) internal pure returns (string memory) {
+        string memory tail = _after(json, '"image":"');
+        // cut at the closing quote
+        bytes memory b = bytes(tail);
+        uint256 end;
+        for (; end < b.length; ++end) {
+            if (b[end] == '"') break;
+        }
+        bytes memory out = new bytes(end);
+        for (uint256 i; i < end; ++i) out[i] = b[i];
+        return string(out);
+    }
+
 
     function _startsWith(string memory s, string memory prefix) internal pure returns (bool) {
         bytes memory b = bytes(s);

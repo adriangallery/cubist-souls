@@ -26,7 +26,8 @@ contract SvgStore {
 
     // ------------------------------------------------------------------ storage
     address public owner;
-    bool public frozen;
+    bool public frozen; // global nuclear freeze (all writes)
+    bool public tokenTableFrozen; // granular freeze of ONLY the token->traits table
 
     struct Asset {
         string name;
@@ -40,16 +41,25 @@ contract SvgStore {
     // token->traits table, one pointer per chunk of TOKENS_PER_CHUNK tokens
     address[] internal _tokenTraitChunks;
 
+    // --- evolutivo: enumeration + category labels (drops without re-uploading) ---
+    // category (traitId>>8) => list of stored traitIds, in insertion order
+    mapping(uint8 => uint16[]) internal _idsByCat;
+    // category => human label, write-once (setCategoryLabel)
+    mapping(uint8 => string) internal _categoryLabel;
+
     // ------------------------------------------------------------------ events
     event TraitStored(uint16 indexed traitId, uint256 pointerCount, uint256 byteLength);
     event OneOfOneStored(uint256 indexed id, uint256 pointerCount, uint256 byteLength);
     event TokenTraitsChunkStored(uint256 indexed chunkIndex, uint256 byteLength);
+    event CategoryLabelSet(uint8 indexed cat, string label);
     event OwnershipTransferred(address indexed from, address indexed to);
     event Sealed();
+    event TableSealed();
 
     // ------------------------------------------------------------------ errors
     error NotOwner();
     error IsSealed();
+    error TableIsSealed();
     error AlreadyStored();
     error EmptyData();
     error BadChunkIndex();
@@ -79,10 +89,22 @@ contract SvgStore {
         owner = to;
     }
 
-    /// @notice One-way freeze of all write functions.
+    /// @notice One-way NUCLEAR freeze of ALL write functions (end-of-life only).
+    /// @dev Do NOT call if future drops (new traits / categories / equips) are
+    ///      wanted: this also blocks setTrait/setCategoryLabel forever. Use
+    ///      sealTable() to lock just the OG token->traits table instead.
     function seal() external onlyOwner {
         frozen = true;
         emit Sealed();
+    }
+
+    /// @notice One-way freeze of ONLY the token->traits table. Call once all 4
+    ///         chunks are uploaded and verified. Leaves setTrait/setOneOfOne/
+    ///         setCategoryLabel open so new traits and categories can still be
+    ///         added on-chain later without re-uploading anything.
+    function sealTable() external onlyOwner {
+        tokenTableFrozen = true;
+        emit TableSealed();
     }
 
     /// @notice Store the inner SVG content of a composable trait. Idempotent-
@@ -99,7 +121,18 @@ contract SvgStore {
         if (a.pointers.length != 0) revert AlreadyStored();
         a.name = name;
         _storePointers(a.pointers, inner);
+        _idsByCat[uint8(traitId >> 8)].push(traitId);
         emit TraitStored(traitId, a.pointers.length, inner.length);
+    }
+
+    /// @notice Set a category's human label (write-once). Pre-load 0-7 (z-order)
+    ///         + 8 (Burn Cube) at upload time; a future category (9+, e.g. a
+    ///         "Frame" season) is enabled with a single tx here.
+    function setCategoryLabel(uint8 cat, string calldata label) external onlyOwner notSealed {
+        if (bytes(_categoryLabel[cat]).length != 0) revert AlreadyStored();
+        if (bytes(label).length == 0) revert EmptyData();
+        _categoryLabel[cat] = label;
+        emit CategoryLabelSet(cat, label);
     }
 
     /// @notice Store a one-of-one SVG under an arbitrary id.
@@ -125,6 +158,7 @@ contract SvgStore {
         onlyOwner
         notSealed
     {
+        if (tokenTableFrozen) revert TableIsSealed();
         if (chunkIndex != _tokenTraitChunks.length) revert BadChunkIndex();
         if (data.length != TOKENS_PER_CHUNK * BYTES_PER_TOKEN) revert BadChunkLength();
         _tokenTraitChunks.push(SSTORE2.write(data));
@@ -162,6 +196,29 @@ contract SvgStore {
     /// @notice Concatenated inner SVG for a trait; "" if not stored. Never reverts.
     function traitSvg(uint16 traitId) external view returns (bytes memory) {
         return _concat(_traits[traitId].pointers);
+    }
+
+    // --- enumeration + category labels (for shops / facets / frontends) ---
+
+    /// @notice Number of traits stored in a category.
+    function categoryTraitCount(uint8 cat) external view returns (uint256) {
+        return _idsByCat[cat].length;
+    }
+
+    /// @notice The i-th stored traitId in a category (insertion order).
+    function categoryTraitAt(uint8 cat, uint256 index) external view returns (uint16) {
+        return _idsByCat[cat][index];
+    }
+
+    /// @notice The next free option index in a category (== current count).
+    ///         Handy when uploading a drop: the new trait's opt is nextOption(cat).
+    function nextOption(uint8 cat) external view returns (uint16) {
+        return uint16(_idsByCat[cat].length);
+    }
+
+    /// @notice Human label for a category; "" if unset. Never reverts.
+    function categoryLabel(uint8 cat) external view returns (string memory) {
+        return _categoryLabel[cat];
     }
 
     // --- one-of-ones ---

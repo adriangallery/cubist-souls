@@ -18,7 +18,9 @@ def esc(s: str) -> str:
 def main() -> None:
     d = json.load(open(os.path.join(ROOT, "onchain-data/traits-index.json")))
     entries = []  # (traitId, path, name)
+    cats = []  # (cat, label)
     for c in d["categories"]:
+        cats.append((c["cat"], c["label"]))
         for o in c["options"]:
             entries.append((o["traitId"], o["svg"], o["label"]))
     adrian = next(x for x in d["oneOfOnes"] if x.get("svg"))
@@ -45,6 +47,16 @@ def main() -> None:
         lines.append(
             f'        traitIds[{i}] = {tid}; paths[{i}] = "onchain-data/{path}"; names[{i}] = "{esc(name)}";'
         )
+    lines += [
+        "    }",
+        "",
+        "    /// @notice Category (z-order) labels for setCategoryLabel, cats 0-8.",
+        "    function categories() internal pure returns (uint8[] memory cats, string[] memory labels) {",
+        f"        cats = new uint8[]({len(cats)});",
+        f"        labels = new string[]({len(cats)});",
+    ]
+    for i, (cat, label) in enumerate(cats):
+        lines.append(f'        cats[{i}] = {cat}; labels[{i}] = "{esc(label)}";')
     lines += [
         "    }",
         "",
