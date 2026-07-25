@@ -1,0 +1,1144 @@
+{
+ "note": "traitId=(cat<<8)|opt. cat 0-7 = zOrder real de render (AB,Base,Clothes,Head,Mouth,LeftEye,Nose,RightEye). cat 8 = Burn Cube (traits nuevos artista). Byte 0xFF = sin trait.",
+ "zOrder": [
+  "art-background",
+  "base",
+  "clothes",
+  "head",
+  "mouth",
+  "left-eye",
+  "nose",
+  "right-eye"
+ ],
+ "categories": [
+  {
+   "cat": 0,
+   "id": "art-background",
+   "label": "Art Background",
+   "options": [
+    {
+     "opt": 0,
+     "traitId": 0,
+     "label": "Color Block",
+     "svg": "svg/art-background/color-block.svg",
+     "ogCount": 669
+    },
+    {
+     "opt": 1,
+     "traitId": 1,
+     "label": "Emerald Tiles",
+     "svg": "svg/art-background/emerald-tiles.svg",
+     "ogCount": 658
+    },
+    {
+     "opt": 2,
+     "traitId": 2,
+     "label": "Leaf Tiles",
+     "svg": "svg/art-background/leaf-tiles.svg",
+     "ogCount": 645
+    },
+    {
+     "opt": 3,
+     "traitId": 3,
+     "label": "Snow Tiles",
+     "svg": "svg/art-background/snow-tiles.svg",
+     "ogCount": 720
+    },
+    {
+     "opt": 4,
+     "traitId": 4,
+     "label": "Star Blue",
+     "svg": "svg/art-background/star-blue.svg",
+     "ogCount": 706
+    },
+    {
+     "opt": 5,
+     "traitId": 5,
+     "label": "Star Brown",
+     "svg": "svg/art-background/star-brown.svg",
+     "ogCount": 688
+    },
+    {
+     "opt": 6,
+     "traitId": 6,
+     "label": "Star Emerald",
+     "svg": "svg/art-background/star-emerald.svg",
+     "ogCount": 679
+    },
+    {
+     "opt": 7,
+     "traitId": 7,
+     "label": "Star Green",
+     "svg": "svg/art-background/star-green.svg",
+     "ogCount": 664
+    },
+    {
+     "opt": 8,
+     "traitId": 8,
+     "label": "Star Neon",
+     "svg": "svg/art-background/star-neon.svg",
+     "ogCount": 639
+    },
+    {
+     "opt": 9,
+     "traitId": 9,
+     "label": "Star Orange",
+     "svg": "svg/art-background/star-orange.svg",
+     "ogCount": 653
+    },
+    {
+     "opt": 10,
+     "traitId": 10,
+     "label": "Star Pink",
+     "svg": "svg/art-background/star-pink.svg",
+     "ogCount": 673
+    },
+    {
+     "opt": 11,
+     "traitId": 11,
+     "label": "Star Purple",
+     "svg": "svg/art-background/star-purple.svg",
+     "ogCount": 625
+    },
+    {
+     "opt": 12,
+     "traitId": 12,
+     "label": "Star Red",
+     "svg": "svg/art-background/star-red.svg",
+     "ogCount": 682
+    },
+    {
+     "opt": 13,
+     "traitId": 13,
+     "label": "Star Snow",
+     "svg": "svg/art-background/star-snow.svg",
+     "ogCount": 627
+    },
+    {
+     "opt": 14,
+     "traitId": 14,
+     "label": "Star White",
+     "svg": "svg/art-background/star-white.svg",
+     "ogCount": 668
+    }
+   ]
+  },
+  {
+   "cat": 1,
+   "id": "base",
+   "label": "Base",
+   "options": [
+    {
+     "opt": 0,
+     "traitId": 256,
+     "label": "Ancient Tribe",
+     "svg": "svg/base/ancient-tribe.svg",
+     "ogCount": 456
+    },
+    {
+     "opt": 1,
+     "traitId": 257,
+     "label": "As a Human",
+     "svg": "svg/base/as-a-human.svg",
+     "ogCount": 540
+    },
+    {
+     "opt": 2,
+     "traitId": 258,
+     "label": "Childs Play",
+     "svg": "svg/base/childs-play.svg",
+     "ogCount": 484
+    },
+    {
+     "opt": 3,
+     "traitId": 259,
+     "label": "Dark Night",
+     "svg": "svg/base/dark-night.svg",
+     "ogCount": 499
+    },
+    {
+     "opt": 4,
+     "traitId": 260,
+     "label": "Emerald Shine",
+     "svg": "svg/base/emerald-shine.svg",
+     "ogCount": 503
+    },
+    {
+     "opt": 5,
+     "traitId": 261,
+     "label": "Geometry Dash",
+     "svg": "svg/base/geometry-dash.svg",
+     "ogCount": 523
+    },
+    {
+     "opt": 6,
+     "traitId": 262,
+     "label": "Glow Stone",
+     "svg": "svg/base/glow-stone.svg",
+     "ogCount": 437
+    },
+    {
+     "opt": 7,
+     "traitId": 263,
+     "label": "Grassland",
+     "svg": "svg/base/grassland.svg",
+     "ogCount": 513
+    },
+    {
+     "opt": 8,
+     "traitId": 264,
+     "label": "Heatwave",
+     "svg": "svg/base/heatwave.svg",
+     "ogCount": 501
+    },
+    {
+     "opt": 9,
+     "traitId": 265,
+     "label": "Impression Sunrise",
+     "svg": "svg/base/impression-sunrise.svg",
+     "ogCount": 528
+    },
+    {
+     "opt": 10,
+     "traitId": 266,
+     "label": "Ocean Eyes",
+     "svg": "svg/base/ocean-eyes.svg",
+     "ogCount": 520
+    },
+    {
+     "opt": 11,
+     "traitId": 267,
+     "label": "Playground",
+     "svg": "svg/base/playground.svg",
+     "ogCount": 509
+    },
+    {
+     "opt": 12,
+     "traitId": 268,
+     "label": "Snowy Weather",
+     "svg": "svg/base/snowy-weather.svg",
+     "ogCount": 497
+    },
+    {
+     "opt": 13,
+     "traitId": 269,
+     "label": "Soft Cloud",
+     "svg": "svg/base/soft-cloud.svg",
+     "ogCount": 526
+    },
+    {
+     "opt": 14,
+     "traitId": 270,
+     "label": "Star Gazer",
+     "svg": "svg/base/star-gazer.svg",
+     "ogCount": 505
+    },
+    {
+     "opt": 15,
+     "traitId": 271,
+     "label": "Star Struck",
+     "svg": "svg/base/star-struck.svg",
+     "ogCount": 486
+    },
+    {
+     "opt": 16,
+     "traitId": 272,
+     "label": "Sun Burn",
+     "svg": "svg/base/sun-burn.svg",
+     "ogCount": 493
+    },
+    {
+     "opt": 17,
+     "traitId": 273,
+     "label": "Sunset Point",
+     "svg": "svg/base/sunset-point.svg",
+     "ogCount": 482
+    },
+    {
+     "opt": 18,
+     "traitId": 274,
+     "label": "The Scream",
+     "svg": "svg/base/the-scream.svg",
+     "ogCount": 475
+    },
+    {
+     "opt": 19,
+     "traitId": 275,
+     "label": "Time Leap",
+     "svg": "svg/base/time-leap.svg",
+     "ogCount": 519
+    }
+   ]
+  },
+  {
+   "cat": 2,
+   "id": "clothes",
+   "label": "Clothes",
+   "options": [
+    {
+     "opt": 0,
+     "traitId": 512,
+     "label": "Black Hoodie",
+     "svg": "svg/clothes/black-hoodie.svg",
+     "ogCount": 672
+    },
+    {
+     "opt": 1,
+     "traitId": 513,
+     "label": "Detective Noir",
+     "svg": "svg/clothes/detective-noir.svg",
+     "ogCount": 683
+    },
+    {
+     "opt": 2,
+     "traitId": 514,
+     "label": "Emerald Butler",
+     "svg": "svg/clothes/emerald-butler.svg",
+     "ogCount": 657
+    },
+    {
+     "opt": 3,
+     "traitId": 515,
+     "label": "Fiery Suit",
+     "svg": "svg/clothes/fiery-suit.svg",
+     "ogCount": 681
+    },
+    {
+     "opt": 4,
+     "traitId": 516,
+     "label": "Greek Gods",
+     "svg": "svg/clothes/greek-gods.svg",
+     "ogCount": 663
+    },
+    {
+     "opt": 5,
+     "traitId": 517,
+     "label": "High Noble",
+     "svg": "svg/clothes/high-noble.svg",
+     "ogCount": 678
+    },
+    {
+     "opt": 6,
+     "traitId": 518,
+     "label": "Painter Work",
+     "svg": "svg/clothes/painter-work.svg",
+     "ogCount": 662
+    },
+    {
+     "opt": 7,
+     "traitId": 519,
+     "label": "Polo Spike",
+     "svg": "svg/clothes/polo-spike.svg",
+     "ogCount": 602
+    },
+    {
+     "opt": 8,
+     "traitId": 520,
+     "label": "Red Scarf",
+     "svg": "svg/clothes/red-scarf.svg",
+     "ogCount": 655
+    },
+    {
+     "opt": 9,
+     "traitId": 521,
+     "label": "Shabby Suit",
+     "svg": "svg/clothes/shabby-suit.svg",
+     "ogCount": 680
+    },
+    {
+     "opt": 10,
+     "traitId": 522,
+     "label": "Shabby Vest",
+     "svg": "svg/clothes/shabby-vest.svg",
+     "ogCount": 671
+    },
+    {
+     "opt": 11,
+     "traitId": 523,
+     "label": "Spider Vest",
+     "svg": "svg/clothes/spider-vest.svg",
+     "ogCount": 681
+    },
+    {
+     "opt": 12,
+     "traitId": 524,
+     "label": "Tartan Flanel",
+     "svg": "svg/clothes/tartan-flanel.svg",
+     "ogCount": 672
+    },
+    {
+     "opt": 13,
+     "traitId": 525,
+     "label": "Tribe Vest",
+     "svg": "svg/clothes/tribe-vest.svg",
+     "ogCount": 685
+    },
+    {
+     "opt": 14,
+     "traitId": 526,
+     "label": "White Hoodie",
+     "svg": "svg/clothes/white-hoodie.svg",
+     "ogCount": 654
+    }
+   ]
+  },
+  {
+   "cat": 3,
+   "id": "head",
+   "label": "Head",
+   "options": [
+    {
+     "opt": 0,
+     "traitId": 768,
+     "label": "Beanie Thug",
+     "svg": "svg/head/beanie-thug.svg",
+     "ogCount": 670
+    },
+    {
+     "opt": 1,
+     "traitId": 769,
+     "label": "Birthday Party",
+     "svg": "svg/head/birthday-party.svg",
+     "ogCount": 664
+    },
+    {
+     "opt": 2,
+     "traitId": 770,
+     "label": "Business Man",
+     "svg": "svg/head/business-man.svg",
+     "ogCount": 667
+    },
+    {
+     "opt": 3,
+     "traitId": 771,
+     "label": "Classic Hat",
+     "svg": "svg/head/classic-hat.svg",
+     "ogCount": 665
+    },
+    {
+     "opt": 4,
+     "traitId": 772,
+     "label": "Dress to Impress",
+     "svg": "svg/head/dress-to-impress.svg",
+     "ogCount": 674
+    },
+    {
+     "opt": 5,
+     "traitId": 773,
+     "label": "Greek Gods",
+     "svg": "svg/head/greek-gods.svg",
+     "ogCount": 677
+    },
+    {
+     "opt": 6,
+     "traitId": 774,
+     "label": "Paper Crown",
+     "svg": "svg/head/paper-crown.svg",
+     "ogCount": 671
+    },
+    {
+     "opt": 7,
+     "traitId": 775,
+     "label": "Punk Never Die",
+     "svg": "svg/head/punk-never-die.svg",
+     "ogCount": 680
+    },
+    {
+     "opt": 8,
+     "traitId": 776,
+     "label": "Red Flat Cap",
+     "svg": "svg/head/red-flat-cap.svg",
+     "ogCount": 677
+    },
+    {
+     "opt": 9,
+     "traitId": 777,
+     "label": "Senior Detective",
+     "svg": "svg/head/senior-detective.svg",
+     "ogCount": 657
+    },
+    {
+     "opt": 10,
+     "traitId": 778,
+     "label": "Slick Back",
+     "svg": "svg/head/slick-back.svg",
+     "ogCount": 629
+    },
+    {
+     "opt": 11,
+     "traitId": 779,
+     "label": "Snapback",
+     "svg": "svg/head/snapback.svg",
+     "ogCount": 653
+    },
+    {
+     "opt": 12,
+     "traitId": 780,
+     "label": "Tribe Hat",
+     "svg": "svg/head/tribe-hat.svg",
+     "ogCount": 670
+    },
+    {
+     "opt": 13,
+     "traitId": 781,
+     "label": "Trickster",
+     "svg": "svg/head/trickster.svg",
+     "ogCount": 694
+    },
+    {
+     "opt": 14,
+     "traitId": 782,
+     "label": "Trucker Cap",
+     "svg": "svg/head/trucker-cap.svg",
+     "ogCount": 648
+    }
+   ]
+  },
+  {
+   "cat": 4,
+   "id": "mouth",
+   "label": "Mouth",
+   "options": [
+    {
+     "opt": 0,
+     "traitId": 1024,
+     "label": "Amphibious",
+     "svg": "svg/mouth/amphibious.svg",
+     "ogCount": 501
+    },
+    {
+     "opt": 1,
+     "traitId": 1025,
+     "label": "Artistic",
+     "svg": "svg/mouth/artistic.svg",
+     "ogCount": 436
+    },
+    {
+     "opt": 2,
+     "traitId": 1026,
+     "label": "Checkered",
+     "svg": "svg/mouth/checkered.svg",
+     "ogCount": 484
+    },
+    {
+     "opt": 3,
+     "traitId": 1027,
+     "label": "Clown Surprise",
+     "svg": "svg/mouth/clown-surprise.svg",
+     "ogCount": 479
+    },
+    {
+     "opt": 4,
+     "traitId": 1028,
+     "label": "Coward",
+     "svg": "svg/mouth/coward.svg",
+     "ogCount": 477
+    },
+    {
+     "opt": 5,
+     "traitId": 1029,
+     "label": "Diva",
+     "svg": "svg/mouth/diva.svg",
+     "ogCount": 513
+    },
+    {
+     "opt": 6,
+     "traitId": 1030,
+     "label": "Dress to Kill",
+     "svg": "svg/mouth/dress-to-kill.svg",
+     "ogCount": 427
+    },
+    {
+     "opt": 7,
+     "traitId": 1031,
+     "label": "Gentleman",
+     "svg": "svg/mouth/gentleman.svg",
+     "ogCount": 514
+    },
+    {
+     "opt": 8,
+     "traitId": 1032,
+     "label": "Lipstain",
+     "svg": "svg/mouth/lipstain.svg",
+     "ogCount": 531
+    },
+    {
+     "opt": 9,
+     "traitId": 1033,
+     "label": "Need Water",
+     "svg": "svg/mouth/need-water.svg",
+     "ogCount": 517
+    },
+    {
+     "opt": 10,
+     "traitId": 1034,
+     "label": "Nervous",
+     "svg": "svg/mouth/nervous.svg",
+     "ogCount": 510
+    },
+    {
+     "opt": 11,
+     "traitId": 1035,
+     "label": "Not Speak",
+     "svg": "svg/mouth/not-speak.svg",
+     "ogCount": 530
+    },
+    {
+     "opt": 12,
+     "traitId": 1036,
+     "label": "Rainbow Grill",
+     "svg": "svg/mouth/rainbow-grill.svg",
+     "ogCount": 524
+    },
+    {
+     "opt": 13,
+     "traitId": 1037,
+     "label": "Scaredy",
+     "svg": "svg/mouth/scaredy.svg",
+     "ogCount": 518
+    },
+    {
+     "opt": 14,
+     "traitId": 1038,
+     "label": "Scary",
+     "svg": "svg/mouth/scary.svg",
+     "ogCount": 515
+    },
+    {
+     "opt": 15,
+     "traitId": 1039,
+     "label": "Sharp Angle",
+     "svg": "svg/mouth/sharp-angle.svg",
+     "ogCount": 512
+    },
+    {
+     "opt": 16,
+     "traitId": 1040,
+     "label": "Sheriff on Duty",
+     "svg": "svg/mouth/sheriff-on-duty.svg",
+     "ogCount": 510
+    },
+    {
+     "opt": 17,
+     "traitId": 1041,
+     "label": "Talk to Much",
+     "svg": "svg/mouth/talk-to-much.svg",
+     "ogCount": 484
+    },
+    {
+     "opt": 18,
+     "traitId": 1042,
+     "label": "Unshaven",
+     "svg": "svg/mouth/unshaven.svg",
+     "ogCount": 493
+    },
+    {
+     "opt": 19,
+     "traitId": 1043,
+     "label": "Wide Open",
+     "svg": "svg/mouth/wide-open.svg",
+     "ogCount": 521
+    }
+   ]
+  },
+  {
+   "cat": 5,
+   "id": "left-eye",
+   "label": "Left Eye",
+   "options": [
+    {
+     "opt": 0,
+     "traitId": 1280,
+     "label": "All Seeing Eye",
+     "svg": "svg/left-eye/all-seeing-eye.svg",
+     "ogCount": 512
+    },
+    {
+     "opt": 1,
+     "traitId": 1281,
+     "label": "Asymmetrical",
+     "svg": "svg/left-eye/asymmetrical.svg",
+     "ogCount": 488
+    },
+    {
+     "opt": 2,
+     "traitId": 1282,
+     "label": "Blank Gaze",
+     "svg": "svg/left-eye/blank-gaze.svg",
+     "ogCount": 492
+    },
+    {
+     "opt": 3,
+     "traitId": 1283,
+     "label": "Checkered",
+     "svg": "svg/left-eye/checkered.svg",
+     "ogCount": 505
+    },
+    {
+     "opt": 4,
+     "traitId": 1284,
+     "label": "Childs Play",
+     "svg": "svg/left-eye/childs-play.svg",
+     "ogCount": 504
+    },
+    {
+     "opt": 5,
+     "traitId": 1285,
+     "label": "Colony",
+     "svg": "svg/left-eye/colony.svg",
+     "ogCount": 473
+    },
+    {
+     "opt": 6,
+     "traitId": 1286,
+     "label": "Confidence",
+     "svg": "svg/left-eye/confidence.svg",
+     "ogCount": 505
+    },
+    {
+     "opt": 7,
+     "traitId": 1287,
+     "label": "Danger Sign",
+     "svg": "svg/left-eye/danger-sign.svg",
+     "ogCount": 479
+    },
+    {
+     "opt": 8,
+     "traitId": 1288,
+     "label": "Dead Man",
+     "svg": "svg/left-eye/dead-man.svg",
+     "ogCount": 510
+    },
+    {
+     "opt": 9,
+     "traitId": 1289,
+     "label": "Hierarchy",
+     "svg": "svg/left-eye/hierarchy.svg",
+     "ogCount": 500
+    },
+    {
+     "opt": 10,
+     "traitId": 1290,
+     "label": "Kinda Blue",
+     "svg": "svg/left-eye/kinda-blue.svg",
+     "ogCount": 532
+    },
+    {
+     "opt": 11,
+     "traitId": 1291,
+     "label": "Normal Square",
+     "svg": "svg/left-eye/normal-square.svg",
+     "ogCount": 493
+    },
+    {
+     "opt": 12,
+     "traitId": 1292,
+     "label": "Not See",
+     "svg": "svg/left-eye/not-see.svg",
+     "ogCount": 519
+    },
+    {
+     "opt": 13,
+     "traitId": 1293,
+     "label": "So Lame",
+     "svg": "svg/left-eye/so-lame.svg",
+     "ogCount": 519
+    },
+    {
+     "opt": 14,
+     "traitId": 1294,
+     "label": "The Doll Maker",
+     "svg": "svg/left-eye/the-doll-maker.svg",
+     "ogCount": 493
+    },
+    {
+     "opt": 15,
+     "traitId": 1295,
+     "label": "Tilted",
+     "svg": "svg/left-eye/tilted.svg",
+     "ogCount": 488
+    },
+    {
+     "opt": 16,
+     "traitId": 1296,
+     "label": "Tired Man",
+     "svg": "svg/left-eye/tired-man.svg",
+     "ogCount": 487
+    },
+    {
+     "opt": 17,
+     "traitId": 1297,
+     "label": "Triangle Bright",
+     "svg": "svg/left-eye/triangle-bright.svg",
+     "ogCount": 475
+    },
+    {
+     "opt": 18,
+     "traitId": 1298,
+     "label": "Triangle Buddy",
+     "svg": "svg/left-eye/triangle-buddy.svg",
+     "ogCount": 507
+    },
+    {
+     "opt": 19,
+     "traitId": 1299,
+     "label": "Wrong Option",
+     "svg": "svg/left-eye/wrong-option.svg",
+     "ogCount": 515
+    }
+   ]
+  },
+  {
+   "cat": 6,
+   "id": "nose",
+   "label": "Nose",
+   "options": [
+    {
+     "opt": 0,
+     "traitId": 1536,
+     "label": "Amethyst Block",
+     "svg": "svg/nose/amethyst-block.svg",
+     "ogCount": 520
+    },
+    {
+     "opt": 1,
+     "traitId": 1537,
+     "label": "Banana Juice",
+     "svg": "svg/nose/banana-juice.svg",
+     "ogCount": 465
+    },
+    {
+     "opt": 2,
+     "traitId": 1538,
+     "label": "Big Bad Red",
+     "svg": "svg/nose/big-bad-red.svg",
+     "ogCount": 540
+    },
+    {
+     "opt": 3,
+     "traitId": 1539,
+     "label": "Block",
+     "svg": "svg/nose/block.svg",
+     "ogCount": 485
+    },
+    {
+     "opt": 4,
+     "traitId": 1540,
+     "label": "Digital Circus",
+     "svg": "svg/nose/digital-circus.svg",
+     "ogCount": 478
+    },
+    {
+     "opt": 5,
+     "traitId": 1541,
+     "label": "Jagged",
+     "svg": "svg/nose/jagged.svg",
+     "ogCount": 479
+    },
+    {
+     "opt": 6,
+     "traitId": 1542,
+     "label": "Jigsaw",
+     "svg": "svg/nose/jigsaw.svg",
+     "ogCount": 541
+    },
+    {
+     "opt": 7,
+     "traitId": 1543,
+     "label": "Mirrored",
+     "svg": "svg/nose/mirrored.svg",
+     "ogCount": 459
+    },
+    {
+     "opt": 8,
+     "traitId": 1544,
+     "label": "Monkey Business",
+     "svg": "svg/nose/monkey-business.svg",
+     "ogCount": 510
+    },
+    {
+     "opt": 9,
+     "traitId": 1545,
+     "label": "Mountains",
+     "svg": "svg/nose/mountains.svg",
+     "ogCount": 548
+    },
+    {
+     "opt": 10,
+     "traitId": 1546,
+     "label": "Pinocchio",
+     "svg": "svg/nose/pinocchio.svg",
+     "ogCount": 510
+    },
+    {
+     "opt": 11,
+     "traitId": 1547,
+     "label": "Playground",
+     "svg": "svg/nose/playground.svg",
+     "ogCount": 469
+    },
+    {
+     "opt": 12,
+     "traitId": 1548,
+     "label": "Sky Scraper",
+     "svg": "svg/nose/sky-scraper.svg",
+     "ogCount": 476
+    },
+    {
+     "opt": 13,
+     "traitId": 1549,
+     "label": "Small Business",
+     "svg": "svg/nose/small-business.svg",
+     "ogCount": 519
+    },
+    {
+     "opt": 14,
+     "traitId": 1550,
+     "label": "Smell Detector",
+     "svg": "svg/nose/smell-detector.svg",
+     "ogCount": 514
+    },
+    {
+     "opt": 15,
+     "traitId": 1551,
+     "label": "Spike",
+     "svg": "svg/nose/spike.svg",
+     "ogCount": 476
+    },
+    {
+     "opt": 16,
+     "traitId": 1552,
+     "label": "Steep Stairs",
+     "svg": "svg/nose/steep-stairs.svg",
+     "ogCount": 514
+    },
+    {
+     "opt": 17,
+     "traitId": 1553,
+     "label": "Tangerine",
+     "svg": "svg/nose/tangerine.svg",
+     "ogCount": 492
+    },
+    {
+     "opt": 18,
+     "traitId": 1554,
+     "label": "Thunderstorm",
+     "svg": "svg/nose/thunderstorm.svg",
+     "ogCount": 497
+    },
+    {
+     "opt": 19,
+     "traitId": 1555,
+     "label": "Tribe Quest",
+     "svg": "svg/nose/tribe-quest.svg",
+     "ogCount": 504
+    }
+   ]
+  },
+  {
+   "cat": 7,
+   "id": "right-eye",
+   "label": "Right Eye",
+   "options": [
+    {
+     "opt": 0,
+     "traitId": 1792,
+     "label": "Amphibious",
+     "svg": "svg/right-eye/amphibious.svg",
+     "ogCount": 504
+    },
+    {
+     "opt": 1,
+     "traitId": 1793,
+     "label": "Bruise",
+     "svg": "svg/right-eye/bruise.svg",
+     "ogCount": 477
+    },
+    {
+     "opt": 2,
+     "traitId": 1794,
+     "label": "Christmas Tree",
+     "svg": "svg/right-eye/christmas-tree.svg",
+     "ogCount": 508
+    },
+    {
+     "opt": 3,
+     "traitId": 1795,
+     "label": "Color Picker",
+     "svg": "svg/right-eye/color-picker.svg",
+     "ogCount": 464
+    },
+    {
+     "opt": 4,
+     "traitId": 1796,
+     "label": "Cynical",
+     "svg": "svg/right-eye/cynical.svg",
+     "ogCount": 466
+    },
+    {
+     "opt": 5,
+     "traitId": 1797,
+     "label": "Emergency Exit",
+     "svg": "svg/right-eye/emergency-exit.svg",
+     "ogCount": 483
+    },
+    {
+     "opt": 6,
+     "traitId": 1798,
+     "label": "Eyeshadow",
+     "svg": "svg/right-eye/eyeshadow.svg",
+     "ogCount": 501
+    },
+    {
+     "opt": 7,
+     "traitId": 1799,
+     "label": "Flying Kite",
+     "svg": "svg/right-eye/flying-kite.svg",
+     "ogCount": 502
+    },
+    {
+     "opt": 8,
+     "traitId": 1800,
+     "label": "Focused",
+     "svg": "svg/right-eye/focused.svg",
+     "ogCount": 493
+    },
+    {
+     "opt": 9,
+     "traitId": 1801,
+     "label": "Gaze",
+     "svg": "svg/right-eye/gaze.svg",
+     "ogCount": 535
+    },
+    {
+     "opt": 10,
+     "traitId": 1802,
+     "label": "Mad Man",
+     "svg": "svg/right-eye/mad-man.svg",
+     "ogCount": 513
+    },
+    {
+     "opt": 11,
+     "traitId": 1803,
+     "label": "Moon Drop",
+     "svg": "svg/right-eye/moon-drop.svg",
+     "ogCount": 465
+    },
+    {
+     "opt": 12,
+     "traitId": 1804,
+     "label": "Nocturnal",
+     "svg": "svg/right-eye/nocturnal.svg",
+     "ogCount": 468
+    },
+    {
+     "opt": 13,
+     "traitId": 1805,
+     "label": "Safe Circuit",
+     "svg": "svg/right-eye/safe-circuit.svg",
+     "ogCount": 520
+    },
+    {
+     "opt": 14,
+     "traitId": 1806,
+     "label": "Scratched Deep",
+     "svg": "svg/right-eye/scratched-deep.svg",
+     "ogCount": 505
+    },
+    {
+     "opt": 15,
+     "traitId": 1807,
+     "label": "Shiny Gems",
+     "svg": "svg/right-eye/shiny-gems.svg",
+     "ogCount": 505
+    },
+    {
+     "opt": 16,
+     "traitId": 1808,
+     "label": "Smakeman",
+     "svg": "svg/right-eye/smakeman.svg",
+     "ogCount": 522
+    },
+    {
+     "opt": 17,
+     "traitId": 1809,
+     "label": "Spare Coin",
+     "svg": "svg/right-eye/spare-coin.svg",
+     "ogCount": 545
+    },
+    {
+     "opt": 18,
+     "traitId": 1810,
+     "label": "Time Square",
+     "svg": "svg/right-eye/time-square.svg",
+     "ogCount": 500
+    },
+    {
+     "opt": 19,
+     "traitId": 1811,
+     "label": "Toy Box",
+     "svg": "svg/right-eye/toy-box.svg",
+     "ogCount": 520
+    }
+   ]
+  },
+  {
+   "cat": 8,
+   "id": "burn-cube",
+   "label": "Burn Cube",
+   "options": [
+    {
+     "opt": 0,
+     "traitId": 2048,
+     "label": "Burning Soul",
+     "svg": "svg/burn-cube/burning-soul.svg",
+     "ogCount": 0
+    },
+    {
+     "opt": 1,
+     "traitId": 2049,
+     "label": "Flame Crown",
+     "svg": "svg/burn-cube/flame-crown.svg",
+     "ogCount": 0
+    },
+    {
+     "opt": 2,
+     "traitId": 2050,
+     "label": "Orange",
+     "svg": "svg/burn-cube/orange.svg",
+     "ogCount": 0
+    },
+    {
+     "opt": 3,
+     "traitId": 2051,
+     "label": "Phoenix",
+     "svg": "svg/burn-cube/phoenix.svg",
+     "ogCount": 0
+    }
+   ]
+  }
+ ],
+ "oneOfOnes": [
+  {
+   "tokenId": null,
+   "label": "Adrian 1/1 (nuevo, vector)",
+   "svg": "svg/one-of-one/adrian.svg"
+  },
+  {
+   "tokenId": 90,
+   "label": "Mattie 1/1 (raster, fuera de svg on-chain)"
+  },
+  {
+   "tokenId": 294,
+   "label": "H0ld Sats (raster, fuera de svg on-chain)"
+  },
+  {
+   "tokenId": 600,
+   "label": "Jereziz 1/1 (raster, fuera de svg on-chain)"
+  },
+  {
+   "tokenId": 163,
+   "label": "Mich 1/1 (falta el fichero del artista)"
+  }
+ ]
+}
