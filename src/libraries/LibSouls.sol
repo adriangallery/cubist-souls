@@ -48,6 +48,28 @@ library LibSouls {
         uint256 _reentrancyLock;
         // treasury: destination for withdraw() of accrued convert ETH.
         address treasury;
+        // --- ReaperFacet: Soul Reapers — Pikkazo canvases burned as offerings (append-only) ---
+        // soulsConsumed[reaperId] : running total of Pikkazo canvases a given Soul
+        //   ("reaper") has consumed as fuel. Both offer() and forgeMark() add to it.
+        // reaperMarks[reaperId]   : bitmask of forged marks (bit i set == markId i forged);
+        //   marks are PERMANENT and bound to the token id (they travel on transfer).
+        // markPrices[markId]      : number of Pikkazos required to forge that mark
+        //   (0=Orange 6, 1=FlameCrown 12, 2=Phoenix 18, 3=BurningSoul 30 — seeded by ReaperInit,
+        //   hot-reconfigurable via ReaperFacet.setMarkPrice).
+        // canvasConsumed[pikkazoId] : a Pikkazo burned as a reaper offering. This is a
+        //   PERMANENT, one-way flag. Such a canvas gave its soul to a reaper and NO Soul
+        //   NFT for that id may EVER be minted afterwards. It is the REUSABLE RESCUE GUARD:
+        //   mint() below reverts on a consumed canvas, so EVERY minting/rescue facet — present
+        //   or future — inherits the guarantee for free simply by routing through LibSouls.mint().
+        //   Future rescue facets may also pre-check via isCanvasConsumed(). (NOTE: facets
+        //   already deployed BEFORE this field existed carry an inlined pre-guard copy of
+        //   mint(); to extend the on-chain guarantee to them they must be recompiled+Replaced.)
+        // reaperPaused            : independent pause switch for the ReaperFacet.
+        mapping(uint256 => uint256) soulsConsumed;
+        mapping(uint256 => uint256) reaperMarks;
+        mapping(uint8 => uint16) markPrices;
+        mapping(uint256 => bool) canvasConsumed;
+        bool reaperPaused;
     }
 
     function layout() internal pure returns (Layout storage l) {
@@ -64,15 +86,27 @@ library LibSouls {
     error SoulAlreadyExists(uint256 tokenId);
     error SoulDoesNotExist(uint256 tokenId);
     error MintToZero();
+    error CanvasConsumedByReaper(uint256 tokenId);
 
     function exists(uint256 tokenId) internal view returns (bool) {
         return layout().owners[tokenId] != address(0);
+    }
+
+    /// @notice True if a Pikkazo canvas was burned as a Soul Reaper offering. Such a
+    ///         canvas can NEVER back a minted Soul again. This is the reusable rescue
+    ///         guard: it is enforced inside mint(), so any facet that mints Souls is
+    ///         protected without having to remember to check. Kept `internal` so
+    ///         future facets can also pre-check before doing work.
+    function isCanvasConsumed(uint256 tokenId) internal view returns (bool) {
+        return layout().canvasConsumed[tokenId];
     }
 
     function mint(address to, uint256 tokenId) internal {
         if (to == address(0)) revert MintToZero();
         Layout storage l = layout();
         if (l.owners[tokenId] != address(0)) revert SoulAlreadyExists(tokenId);
+        // Reusable rescue guard: a canvas devoured by a reaper never mints a Soul.
+        if (l.canvasConsumed[tokenId]) revert CanvasConsumedByReaper(tokenId);
         l.owners[tokenId] = to;
         unchecked {
             l.balances[to] += 1;
