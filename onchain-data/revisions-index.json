@@ -1,0 +1,194 @@
+{
+ "note": "Definitive from->to override mapping for the 21 artist revisions. to_id = (cat<<8)|nextOption(cat) captured against the LIVE store 0x6702016627141350792Dd366885a2Fc794eE46C6.",
+ "revisions": [
+  {
+   "cat": 0,
+   "slug": "star-blue",
+   "name": "Star Blue",
+   "from": 4,
+   "to": 15,
+   "v2_svg": "onchain-data/svg/art-background/star-blue-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Art Background/Star Blue.svg"
+  },
+  {
+   "cat": 0,
+   "slug": "star-neon",
+   "name": "Star Neon",
+   "from": 8,
+   "to": 16,
+   "v2_svg": "onchain-data/svg/art-background/star-neon-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Art Background/Star Neon.svg"
+  },
+  {
+   "cat": 0,
+   "slug": "star-pink",
+   "name": "Star Pink",
+   "from": 10,
+   "to": 17,
+   "v2_svg": "onchain-data/svg/art-background/star-pink-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Art Background/Star Pink.svg"
+  },
+  {
+   "cat": 0,
+   "slug": "star-red",
+   "name": "Star Red",
+   "from": 12,
+   "to": 18,
+   "v2_svg": "onchain-data/svg/art-background/star-red-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Art Background/Star Red.svg"
+  },
+  {
+   "cat": 1,
+   "slug": "glow-stone",
+   "name": "Glow Stone",
+   "from": 262,
+   "to": 276,
+   "v2_svg": "onchain-data/svg/base/glow-stone-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Base/Glow Stone.svg"
+  },
+  {
+   "cat": 1,
+   "slug": "heatwave",
+   "name": "Heatwave",
+   "from": 264,
+   "to": 277,
+   "v2_svg": "onchain-data/svg/base/heatwave-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Base/Heatwave.svg"
+  },
+  {
+   "cat": 1,
+   "slug": "impression-sunrise",
+   "name": "Impression Sunrise",
+   "from": 265,
+   "to": 278,
+   "v2_svg": "onchain-data/svg/base/impression-sunrise-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Base/Impression Sunrise.svg"
+  },
+  {
+   "cat": 1,
+   "slug": "soft-cloud",
+   "name": "Soft Cloud",
+   "from": 269,
+   "to": 279,
+   "v2_svg": "onchain-data/svg/base/soft-cloud-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Base/Soft Cloud.svg"
+  },
+  {
+   "cat": 1,
+   "slug": "time-leap",
+   "name": "Time Leap",
+   "from": 275,
+   "to": 280,
+   "v2_svg": "onchain-data/svg/base/time-leap-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Base/Time Leap.svg"
+  },
+  {
+   "cat": 2,
+   "slug": "greek-gods",
+   "name": "Greek Gods",
+   "from": 516,
+   "to": 527,
+   "v2_svg": "onchain-data/svg/clothes/greek-gods-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Clothes/Greek Gods.svg"
+  },
+  {
+   "cat": 2,
+   "slug": "painter-work",
+   "name": "Painter Work",
+   "from": 518,
+   "to": 528,
+   "v2_svg": "onchain-data/svg/clothes/painter-work-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Clothes/Painter Work.svg"
+  },
+  {
+   "cat": 2,
+   "slug": "white-hoodie",
+   "name": "White Hoodie",
+   "from": 526,
+   "to": 529,
+   "v2_svg": "onchain-data/svg/clothes/white-hoodie-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Clothes/White Hoodie.svg"
+  },
+  {
+   "cat": 3,
+   "slug": "greek-gods",
+   "name": "Greek Gods",
+   "from": 773,
+   "to": 783,
+   "v2_svg": "onchain-data/svg/head/greek-gods-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Head/Greek Gods.svg"
+  },
+  {
+   "cat": 3,
+   "slug": "trucker-cap",
+   "name": "Trucker Cap",
+   "from": 782,
+   "to": 784,
+   "v2_svg": "onchain-data/svg/head/trucker-cap-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Head/Trucker Cap.svg"
+  },
+  {
+   "cat": 4,
+   "slug": "artistic",
+   "name": "Artistic",
+   "from": 1025,
+   "to": 1044,
+   "v2_svg": "onchain-data/svg/mouth/artistic-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Mouth/Artistic.svg"
+  },
+  {
+   "cat": 4,
+   "slug": "gentleman",
+   "name": "Gentleman",
+   "from": 1031,
+   "to": 1045,
+   "v2_svg": "onchain-data/svg/mouth/gentleman-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Mouth/Gentleman.svg"
+  },
+  {
+   "cat": 5,
+   "slug": "colony",
+   "name": "Colony",
+   "from": 1285,
+   "to": 1300,
+   "v2_svg": "onchain-data/svg/left-eye/colony-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Left Eye/Colony.svg"
+  },
+  {
+   "cat": 5,
+   "slug": "so-lame",
+   "name": "So Lame",
+   "from": 1293,
+   "to": 1301,
+   "v2_svg": "onchain-data/svg/left-eye/so-lame-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Left Eye/So Lame.svg"
+  },
+  {
+   "cat": 7,
+   "slug": "color-picker",
+   "name": "Color Picker",
+   "from": 1795,
+   "to": 1812,
+   "v2_svg": "onchain-data/svg/right-eye/color-picker-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Right Eye/Color Picker.svg"
+  },
+  {
+   "cat": 7,
+   "slug": "cynical",
+   "name": "Cynical",
+   "from": 1796,
+   "to": 1813,
+   "v2_svg": "onchain-data/svg/right-eye/cynical-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Right Eye/Cynical.svg"
+  },
+  {
+   "cat": 7,
+   "slug": "mad-man",
+   "name": "Mad Man",
+   "from": 1802,
+   "to": 1814,
+   "v2_svg": "onchain-data/svg/right-eye/mad-man-v2.svg",
+   "artist_raw": "/private/tmp/claude-501/-Users-adrian/c17f0312-f7a6-4226-95a8-c2656bb77321/scratchpad/traits_new/Traits New/Right Eye/Mad Man.svg"
+  }
+ ]
+}
