@@ -9,5 +9,10 @@ optimizer_runs = 1000
 via_ir = true
 
 # Read-only access to the generated on-chain data (SVGs + token->traits table)
-# for the upload script and the real-data tests.
-fs_permissions = [{ access = "read", path = "./onchain-data" }]
+# for the upload script and the real-data tests; read-write to ./harness/out so
+# the parity harness fork script can dump the on-chain renderer output.
+fs_permissions = [
+    { access = "read", path = "./onchain-data" },
+    { access = "read", path = "./harness_sample.json" },
+    { access = "read-write", path = "./harness/out" },
+]
