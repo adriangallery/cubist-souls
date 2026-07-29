@@ -70,6 +70,15 @@ library LibSouls {
         mapping(uint8 => uint16) markPrices;
         mapping(uint256 => bool) canvasConsumed;
         bool reaperPaused;
+        // --- SoulsCreatorTokenFacet: ERC-721C transfer validator (append-only) ---
+        // transferValidator: address of the shared Creator Token transfer validator
+        //   consulted on every transferFrom. address(0) == disabled (kill switch:
+        //   setTransferValidator(0) restores plain ERC721 transfers with no external
+        //   call). What the validator actually blocks is NOT decided here — it is the
+        //   collection's security policy, held in the validator itself and changed with
+        //   setRulesetOfCollection(). An unset policy (rulesetId 0, no ruleset module
+        //   bound) validates everything, i.e. the call is a pass-through.
+        address transferValidator;
     }
 
     function layout() internal pure returns (Layout storage l) {
