@@ -13,24 +13,29 @@ library LibRaffle {
     ///         per raffle, so a new occasion is a new set of numbers — never a new
     ///         facet, never another diamondCut.
     ///
-    ///         tickets(wallet) = perConsumedSoul × soulsConsumed(wallet's reapers)
-    ///                         + perSoulHeld     × soulsHeld
-    ///                         + perOGSoulHeld   × ogSoulsHeld
+    ///         tickets(wallet) = perConsumedSoul × soulsConsumed   (counted at CLOSE)
+    ///                         + perAscendedReaper × ascendedReapers (counted at CLOSE)
+    ///                         + perSoulHeld       × soulsHeld       (counted at HOLDER block)
+    ///                         + perOGSoulHeld     × ogSoulsHeld     (counted at HOLDER block)
     ///                         + (soulsHeld > 0 ? perHolderWallet : 0)
     ///         then capped at maxPerWallet when that is non-zero.
     struct Weights {
-        uint16 perConsumedSoul; // the reaper tickets: 1 per Pikkazo given to the fire
-        uint16 perHolderWallet; // a flat entry for anyone holding a soul at all
-        uint16 perSoulHeld;     // 0 by default — for occasions that want size to count
-        uint16 perOGSoulHeld;   // 0 by default — for occasions that want seniority to count
-        uint32 maxPerWallet;    // 0 = uncapped
+        uint16 perConsumedSoul;   // the reaper tickets: 1 per Pikkazo given to the fire
+        uint16 perAscendedReaper; // extra for each soul that went all the way to Soul Reaper
+        uint16 perHolderWallet;   // a flat entry for anyone holding a soul at all
+        uint16 perSoulHeld;       // 0 by default — for occasions that want size to count
+        uint16 perOGSoulHeld;     // 0 by default — for occasions that want seniority to count
+        uint32 maxPerWallet;      // 0 = uncapped
     }
 
     struct Raffle {
         string label;         // "The first 1/1"
         string prizeURI;      // image/description of what is on the table
-        uint64 snapshotBlock; // ALWAYS in the past when the raffle is announced (anti wallet-split)
-        uint64 drawBlock;     // ALWAYS in the future when the raffle is announced (anti owner)
+        // TWO counts, at two heights, because the two kinds of ticket carry different
+        // risks. See the facet's header for the full reasoning.
+        uint64 holderBlock; // PAST at announcement — the flat per-wallet entry is counted here
+        uint64 closeBlock;  // FUTURE — the window shuts; burning up to here still earns tickets
+        uint64 drawBlock;   // after closeBlock — its hash is the seed
         bytes32 seed;         // blockhash(drawBlock), 0 until anchored
         uint32 winners;       // how many wallets win
         bool cancelled;

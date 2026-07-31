@@ -28,18 +28,34 @@ import {LibRaffle} from "../libraries/LibRaffle.sol";
 ///      check they get the same winners and the same hash. The museum cannot lie
 ///      about the result without it being provable.
 ///
-/// @dev THE TWO BLOCKS, and the two different cheats they each stop.
+/// @dev THREE BLOCKS, because an OPEN raffle and an un-farmable one pull in opposite
+///      directions and a single snapshot cannot serve both.
 ///
-///      `snapshotBlock` is in the PAST when the raffle is announced. Holders cannot
-///      reorganise wallets backwards, so the flat per-wallet ticket cannot be farmed
-///      by splitting a collection across fifty addresses.
+///      The point of leaving an occasion open for days (Adrian, 31-jul) is to make
+///      burning Pikkazos during the window count. A snapshot in the past would earn
+///      nobody anything for taking part. But moving it to the end re-opens the hole:
+///      the flat per-wallet entry could be farmed by splitting a collection across
+///      fifty addresses on the last day.
 ///
-///      `drawBlock` is in the FUTURE. The museum picks the snapshot but cannot know
-///      the seed, so it cannot choose a snapshot that makes a chosen wallet win.
+///      The two kinds of ticket carry different risks, so they are counted at
+///      different heights:
 ///
-///      Neither guarantee survives without the other. Both are enforced below.
+///        `holderBlock` — PAST at announcement. The flat per-wallet entry and the
+///        per-soul weights are counted here. This is the farmable part, and a count
+///        that already happened cannot be gamed.
+///
+///        `closeBlock` — FUTURE. Consumed Pikkazos and ascended reapers are counted
+///        here, so everything burned while the window is open earns its tickets.
+///        These cannot be farmed by splitting wallets: more tickets means more
+///        canvases actually given to the fire.
+///
+///        `drawBlock` — after the close. Its hash is the seed, so the museum cannot
+///        know the outcome when it sets any of this up.
+///
+///      Remove any one of the three and something breaks: no open window, or a
+///      farmable entry, or a draw the museum could steer.
 contract RaffleFacet {
-    event RaffleCreated(uint256 indexed id, string label, uint64 snapshotBlock, uint64 drawBlock, uint32 winners);
+    event RaffleCreated(uint256 indexed id, string label, uint64 holderBlock, uint64 closeBlock, uint64 drawBlock, uint32 winners);
     event RaffleUpdated(uint256 indexed id);
     event RaffleCancelled(uint256 indexed id);
     event SeedAnchored(uint256 indexed id, bytes32 seed, uint64 drawBlock);
@@ -49,8 +65,10 @@ contract RaffleFacet {
     event GlobalExclusionSet(address indexed account, bool excluded);
 
     error NoSuchRaffle(uint256 id);
-    error SnapshotMustBePast(uint64 snapshotBlock);
-    error DrawMustBeFuture(uint64 drawBlock);
+    error SnapshotMustBePast(uint64 holderBlock);
+    error CloseMustBeFuture(uint64 closeBlock);
+    error DrawMustFollowClose(uint64 drawBlock, uint64 closeBlock);
+    error WindowAlreadyClosed(uint256 id, uint64 closeBlock);
     error AlreadyDrawn(uint256 id);
     error NotDrawnYet(uint256 id);
     error DrawBlockNotReached(uint256 id, uint64 drawBlock);
@@ -70,34 +88,38 @@ contract RaffleFacet {
     /// @notice Open a new raffle. Owner only.
     /// @param label       what the occasion is called
     /// @param prizeURI    what is on the table (image / description)
-    /// @param snapshotBlock  block the tickets are counted at — MUST already be mined
-    /// @param drawBlock      block whose hash becomes the seed — MUST be in the future
+    /// @param holderBlock block the HOLDER entry is counted at — MUST already be mined
+    /// @param closeBlock  block the window shuts and burning stops counting — future
+    /// @param drawBlock   block whose hash becomes the seed — after the close
     /// @param winners     how many wallets win
     /// @param w           the ticket weights for THIS occasion
     function createRaffle(
         string calldata label,
         string calldata prizeURI,
-        uint64 snapshotBlock,
+        uint64 holderBlock,
+        uint64 closeBlock,
         uint64 drawBlock,
         uint32 winners,
         LibRaffle.Weights calldata w
     ) external returns (uint256 id) {
         LibDiamond.enforceIsContractOwner();
         if (winners == 0) revert NoWinners();
-        if (snapshotBlock >= block.number) revert SnapshotMustBePast(snapshotBlock);
-        if (drawBlock <= block.number) revert DrawMustBeFuture(drawBlock);
+        if (holderBlock >= block.number) revert SnapshotMustBePast(holderBlock);
+        if (closeBlock <= block.number) revert CloseMustBeFuture(closeBlock);
+        if (drawBlock <= closeBlock) revert DrawMustFollowClose(drawBlock, closeBlock);
 
         LibRaffle.Layout storage l = LibRaffle.layout();
         id = l.count++;
         LibRaffle.Raffle storage r = l.raffles[id];
         r.label = label;
         r.prizeURI = prizeURI;
-        r.snapshotBlock = snapshotBlock;
+        r.holderBlock = holderBlock;
+        r.closeBlock = closeBlock;
         r.drawBlock = drawBlock;
         r.winners = winners;
         r.w = w;
 
-        emit RaffleCreated(id, label, snapshotBlock, drawBlock, winners);
+        emit RaffleCreated(id, label, holderBlock, closeBlock, drawBlock, winners);
     }
 
     /// @notice Re-tune an occasion BEFORE its seed exists. Once the seed is anchored
@@ -118,12 +140,26 @@ contract RaffleFacet {
         emit RaffleUpdated(id);
     }
 
-    /// @notice Move the snapshot — still has to be a block already mined.
-    function setSnapshotBlock(uint256 id, uint64 snapshotBlock) external {
+    /// @notice Move the holder count — still has to be a block already mined.
+    function setHolderBlock(uint256 id, uint64 holderBlock) external {
         LibDiamond.enforceIsContractOwner();
         LibRaffle.Raffle storage r = _mutable(id);
-        if (snapshotBlock >= block.number) revert SnapshotMustBePast(snapshotBlock);
-        r.snapshotBlock = snapshotBlock;
+        if (holderBlock >= block.number) revert SnapshotMustBePast(holderBlock);
+        r.holderBlock = holderBlock;
+        emit RaffleUpdated(id);
+    }
+
+    /// @notice Extend (or shorten) the open window. Only while it is still open and
+    ///         before any seed exists — a window cannot be reopened after it shut,
+    ///         which would let late burns in after people saw the field.
+    function setCloseBlock(uint256 id, uint64 closeBlock, uint64 drawBlock) external {
+        LibDiamond.enforceIsContractOwner();
+        LibRaffle.Raffle storage r = _mutable(id);
+        if (block.number >= r.closeBlock) revert WindowAlreadyClosed(id, r.closeBlock);
+        if (closeBlock <= block.number) revert CloseMustBeFuture(closeBlock);
+        if (drawBlock <= closeBlock) revert DrawMustFollowClose(drawBlock, closeBlock);
+        r.closeBlock = closeBlock;
+        r.drawBlock = drawBlock;
         emit RaffleUpdated(id);
     }
 
@@ -133,7 +169,9 @@ contract RaffleFacet {
     function rearmDraw(uint256 id, uint64 newDrawBlock) external {
         LibDiamond.enforceIsContractOwner();
         LibRaffle.Raffle storage r = _mutable(id);
-        if (newDrawBlock <= block.number) revert DrawMustBeFuture(newDrawBlock);
+        if (newDrawBlock <= block.number || newDrawBlock <= r.closeBlock) {
+            revert DrawMustFollowClose(newDrawBlock, r.closeBlock);
+        }
         r.drawBlock = newDrawBlock;
         emit DrawRearmed(id, newDrawBlock);
     }
@@ -234,7 +272,8 @@ contract RaffleFacet {
         returns (
             string memory label,
             string memory prizeURI,
-            uint64 snapshotBlock,
+            uint64 holderBlock,
+            uint64 closeBlock,
             uint64 drawBlock,
             bytes32 seed,
             uint32 winners,
@@ -245,7 +284,7 @@ contract RaffleFacet {
         )
     {
         LibRaffle.Raffle storage r = _existing(id);
-        return (r.label, r.prizeURI, r.snapshotBlock, r.drawBlock, r.seed, r.winners, r.cancelled, r.ticketsHash, r.winnerList, r.w);
+        return (r.label, r.prizeURI, r.holderBlock, r.closeBlock, r.drawBlock, r.seed, r.winners, r.cancelled, r.ticketsHash, r.winnerList, r.w);
     }
 
     /// @notice Whether a wallet is out of this occasion, for either reason.
@@ -266,6 +305,7 @@ contract RaffleFacet {
         uint256 id,
         address account,
         uint256 soulsConsumed,
+        uint256 ascendedReapers,
         uint256 soulsHeld,
         uint256 ogSoulsHeld
     ) external view returns (uint256) {
@@ -273,7 +313,10 @@ contract RaffleFacet {
         if (l.globallyExcluded[account] || l.excluded[id][account]) return 0;
         LibRaffle.Weights memory w = _existing(id).w;
 
-        uint256 t = soulsConsumed * w.perConsumedSoul + soulsHeld * w.perSoulHeld + ogSoulsHeld * w.perOGSoulHeld;
+        uint256 t = soulsConsumed * w.perConsumedSoul
+            + ascendedReapers * w.perAscendedReaper
+            + soulsHeld * w.perSoulHeld
+            + ogSoulsHeld * w.perOGSoulHeld;
         if (soulsHeld > 0) t += w.perHolderWallet;
         if (w.maxPerWallet != 0 && t > w.maxPerWallet) t = w.maxPerWallet;
         return t;
