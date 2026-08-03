@@ -79,6 +79,26 @@ library LibSouls {
         //   setRulesetOfCollection(). An unset policy (rulesetId 0, no ruleset module
         //   bound) validates everything, i.e. the call is a pass-through.
         address transferValidator;
+        // --- VesselFacet: unions of 30 souls fused into a vessel (append-only) ---
+        // A vessel is a NEW token minted over a reaper-consumed canvas id (the only
+        // ids provably free forever). Its 30 member souls are held IN CUSTODY BY THE
+        // DIAMOND (owners[soulId] == address(this)) — deliberately NOT in the vessel's
+        // ERC-6551 vault, where the owner could extract them via execute() and farm
+        // fresh vessels. No selector releases custody; a future "dissolve" is a
+        // deliberate additive cut, not a latent capability. (Adrian 03-ago-2026:
+        // "sin disolución — es un staking diferente".)
+        // vesselMembers[vesselId] : the 30 soul ids fused into that vessel.
+        // fusedInto[soulId]       : vesselId holding this soul (0 == not fused).
+        // isVessel[id]            : marks vessel tokens so cohort/raffle/govern/board
+        //   readers can exclude them from everything soul-specific.
+        // vesselName[vesselId]    : the on-chain plaque, set at fuse, owner-renamable.
+        // vesselFee               : ETH price of the fusion rite (accrues in the
+        //   diamond, leaves via ConvertFacetV2.withdraw() like convert revenue).
+        mapping(uint256 => uint256[]) vesselMembers;
+        mapping(uint256 => uint256) fusedInto;
+        mapping(uint256 => bool) isVessel;
+        mapping(uint256 => string) vesselName;
+        uint256 vesselFee;
     }
 
     function layout() internal pure returns (Layout storage l) {
