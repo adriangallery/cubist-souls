@@ -99,6 +99,25 @@ library LibSouls {
         mapping(uint256 => bool) isVessel;
         mapping(uint256 => string) vesselName;
         uint256 vesselFee;
+        // --- OrderPotFacet: the Order's share of the burn-to-mint fee (append-only) ---
+        // orderPot        : ETH inside this diamond already earmarked for the Order.
+        //   It is NOT a separate balance — the ETH never moves until a draw pays it —
+        //   so `orderPot <= address(this).balance` is an invariant the credit path
+        //   enforces. Only the burn-to-mint fee is shared (Adrian 04-ago): royalties
+        //   and the fusion rite stay with the museum, whole.
+        // orderRoster     : ascended reapers eligible for the draw, in registration
+        //   order. Append-only; membership is permanent because ascension is.
+        // inOrderRoster   : registration guard.
+        // drawBlock       : the FUTURE block whose hash decides the next winner
+        //   (0 == no draw open). Committing to a block that does not exist yet is
+        //   what stops anyone — payer or caller — from grinding the outcome.
+        // lastWinner/lastDrawAt: last result, for the wall.
+        uint256 orderPot;
+        uint256[] orderRoster;
+        mapping(uint256 => bool) inOrderRoster;
+        uint64 drawBlock;
+        uint64 lastDrawAt;
+        uint256 lastWinner;
     }
 
     function layout() internal pure returns (Layout storage l) {
