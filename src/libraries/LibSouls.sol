@@ -118,6 +118,14 @@ library LibSouls {
         uint64 drawBlock;
         uint64 lastDrawAt;
         uint256 lastWinner;
+        // weightBase / weightBonusCap: the draw's shape. Being a reaper is what
+        // gets you in and carries almost all of the weight; the souls a reaper
+        // keeps are a small tilt on top, capped, so 100 souls cannot buy the
+        // draw off someone holding 10 (Adrian 04-ago). 0 means "use the default"
+        // (100 and 30), so no initializer is needed. Owner-tunable while the
+        // museum calibrates.
+        uint16 weightBase;
+        uint16 weightBonusCap;
     }
 
     function layout() internal pure returns (Layout storage l) {

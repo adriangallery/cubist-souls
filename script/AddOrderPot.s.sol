@@ -36,9 +36,9 @@ contract AddOrderPot is Script {
         ILoupeP loupe = ILoupeP(DIAMOND);
         IPot pot = IPot(DIAMOND);
 
-        bytes4[] memory sels = new bytes4[](11);
+        bytes4[] memory sels = new bytes4[](12);
         sels[0] = OrderPotFacet.registerReaper.selector;
-        sels[1] = OrderPotFacet.creditOrder.selector;
+        sels[1] = OrderPotFacet.setWeightParams.selector;
         sels[2] = OrderPotFacet.openDraw.selector;
         sels[3] = OrderPotFacet.settleDraw.selector;
         sels[4] = OrderPotFacet.orderPot.selector;
@@ -48,6 +48,7 @@ contract AddOrderPot is Script {
         sels[8] = OrderPotFacet.pendingDraw.selector;
         sels[9] = OrderPotFacet.lastDraw.selector;
         sels[10] = OrderPotFacet.vaultOf.selector;
+        sels[11] = OrderPotFacet.weightParams.selector;
 
         for (uint256 i; i < sels.length; i++) {
             require(loupe.facetAddress(sels[i]) == address(0), "selector already routed");

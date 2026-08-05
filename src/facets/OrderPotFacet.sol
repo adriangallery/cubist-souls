@@ -26,23 +26,29 @@ import {IERC6551Registry} from "./ReaperAccountFacet.sol";
 ///            so it can never be double-spent by withdraw(): crediting requires
 ///            the balance to be there.
 ///
-///         WEIGHT: a reaper's odds are `1 + the number of tokens its vault
-///         holds`. Feeding souls to your reaper makes it likelier to be chosen —
-///         and since the vault is bound to the token, that strength is part of
-///         the piece and travels with it when sold. The base 1 means an empty
-///         reaper is never excluded, only outmatched. Reading a vault's holdings
-///         is free: they are balances in this very contract.
+///         WEIGHT: being a reaper is what counts. Every member starts from the
+///         same base (100), and the souls entrusted to its vault add ONE ticket
+///         each up to a cap (30) — a nudge, never a takeover. Thirty is the
+///         museum's number: thirty canvases to ascend, thirty souls to fuse,
+///         thirty souls to reinforce. So a bare reaper holds 100 tickets and the
+///         best-fed one 130: about a quarter better odds, not a hundred times.
+///         Someone with 100 souls gains nothing over someone with 30 (Adrian
+///         04-ago: "es un pequeño plus"). Both numbers are owner-tunable while
+///         the museum calibrates. Reading a vault's holdings is free — they are
+///         balances in this very contract.
 contract OrderPotFacet {
     address internal constant REGISTRY = 0x000000006551c19487814612e58FE06813775758;
     address internal constant ACCOUNT_PROXY = 0x55266d75D1a14E4572138116aF39863Ed6596E7F;
     bytes32 internal constant SALT = bytes32(0);
     uint256 internal constant ASCENSION_THRESHOLD = 30;
     uint64 internal constant DRAW_DELAY = 2; // blocks between opening and settling
+    uint16 internal constant DEFAULT_BASE = 100; // the reaper itself
+    uint16 internal constant DEFAULT_BONUS_CAP = 30; // souls, one ticket each, no further
 
     event ReaperRegistered(uint256 indexed reaperId, uint256 rosterSize);
-    event OrderCredited(uint256 amount, uint256 pot);
     event DrawOpened(uint256 pot, uint64 drawBlock);
     event DrawSettled(uint256 indexed reaperId, address indexed vault, uint256 amount, uint256 weight, uint256 totalWeight);
+    event WeightParamsSet(uint16 base, uint16 bonusCap);
 
     error NotAscended(uint256 reaperId);
     error AlreadyRegistered(uint256 reaperId);
@@ -52,8 +58,8 @@ contract OrderPotFacet {
     error NoDrawOpen();
     error TooEarly(uint64 drawBlock);
     error DrawExpired(); // >256 blocks: blockhash is gone, reopen
-    error InsufficientBalance(uint256 free, uint256 asked);
     error PayoutFailed(address vault);
+    error BadWeightParams();
 
     // ------------------------------------------------------------- membership
 
@@ -70,18 +76,11 @@ contract OrderPotFacet {
     }
 
     // ----------------------------------------------------------------- credit
-
-    /// @notice Earmark `amount` of the diamond's ETH for the Order. Owner only —
-    ///         the museum credits the Order's half of each burn-to-mint fee.
-    ///         Cannot earmark ETH that is not there, and cannot earmark twice.
-    function creditOrder(uint256 amount) external {
-        LibDiamond.enforceIsContractOwner();
-        LibSouls.Layout storage l = LibSouls.layout();
-        uint256 free = address(this).balance - l.orderPot;
-        if (amount > free) revert InsufficientBalance(free, amount);
-        l.orderPot += amount;
-        emit OrderCredited(amount, l.orderPot);
-    }
+    //
+    // There is deliberately NO credit function. The Order's share is added by
+    // ConvertFacetV3, inside the mint itself, as exactly half of what the minter
+    // paid. Nobody — not even the owner — can move museum money into the Order's
+    // line by hand, so a typo can never hand royalties to the reapers.
 
     // ------------------------------------------------------------------- draw
 
@@ -144,7 +143,29 @@ contract OrderPotFacet {
         emit DrawSettled(reaperId, vault, amount, w, total);
     }
 
+    // ------------------------------------------------------------------ admin
+
+    /// @notice Reshape the draw: the base every member carries, and how many
+    ///         souls can add a ticket. Owner only. Base must stay non-zero so a
+    ///         bare reaper is never excluded.
+    function setWeightParams(uint16 base, uint16 bonusCap) external {
+        LibDiamond.enforceIsContractOwner();
+        if (base == 0) revert BadWeightParams();
+        LibSouls.Layout storage l = LibSouls.layout();
+        l.weightBase = base;
+        l.weightBonusCap = bonusCap;
+        emit WeightParamsSet(base, bonusCap);
+    }
+
     // ------------------------------------------------------------------ views
+
+    /// @notice The draw's shape: the base every member carries and the cap on
+    ///         the soul bonus.
+    function weightParams() external view returns (uint16 base, uint16 bonusCap) {
+        LibSouls.Layout storage l = LibSouls.layout();
+        base = l.weightBase == 0 ? DEFAULT_BASE : l.weightBase;
+        bonusCap = l.weightBase == 0 && l.weightBonusCap == 0 ? DEFAULT_BONUS_CAP : l.weightBonusCap;
+    }
 
     function orderPot() external view returns (uint256) {
         return LibSouls.layout().orderPot;
@@ -154,7 +175,8 @@ contract OrderPotFacet {
         return LibSouls.layout().orderRoster;
     }
 
-    /// @notice A reaper's odds: 1, plus every token its vault holds.
+    /// @notice A reaper's odds: the base it carries for being a reaper, plus one
+    ///         ticket per soul in its vault, up to the cap.
     function weightOf(uint256 reaperId) external view returns (uint256) {
         LibSouls.Layout storage l = LibSouls.layout();
         if (!l.inOrderRoster[reaperId]) return 0;
@@ -188,7 +210,10 @@ contract OrderPotFacet {
     // --------------------------------------------------------------- internal
 
     function _weight(LibSouls.Layout storage l, uint256 reaperId) private view returns (uint256) {
-        return 1 + l.balances[vaultOf(reaperId)];
+        uint256 base = l.weightBase == 0 ? DEFAULT_BASE : l.weightBase;
+        uint256 cap = l.weightBase == 0 && l.weightBonusCap == 0 ? DEFAULT_BONUS_CAP : l.weightBonusCap;
+        uint256 kept = l.balances[vaultOf(reaperId)];
+        return base + (kept < cap ? kept : cap);
     }
 
     function _totalWeight(LibSouls.Layout storage l) private view returns (uint256 total) {
