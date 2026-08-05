@@ -126,6 +126,13 @@ library LibSouls {
         // museum calibrates.
         uint16 weightBase;
         uint16 weightBonusCap;
+        // drawInMintOff: kill switch for settling inside the mint. The draw is
+        // meant to ride along with burn-to-mint — one mint opens it, the next
+        // one settles it — so it needs no keeper and no extra transaction. If
+        // the Order ever grows large enough that walking it makes minting
+        // expensive, the museum can switch this off and fall back to the
+        // permissionless openDraw/settleDraw pair.
+        bool drawInMintOff;
     }
 
     function layout() internal pure returns (Layout storage l) {
